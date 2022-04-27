@@ -16,7 +16,7 @@ def get_float(data, index):
 def main():
     print("1: Voltaje \n2: Corriente\n3: Potencia")
     number = input("Digite el valor asociado al comando: ")
-    bus.write_byte(I2C_SLAVE_ADDR, 0x01, int(number))
+    bus.write_byte(I2C_SLAVE_ADDR, int(number))
     print("\n")
     print("Arduino answer to RPI: ", get_data())
     print("\n")
