@@ -6,7 +6,8 @@ bus = smbus.SMBus(1)
 I2C_SLAVE_ADDR = 0x04
 
 def get_data():
-    data = bus.read_byte_data(I2C_SLAVE_ADDR, 0x00)
+    data = bus.read_i2c_block_data(I2C_SLAVE_ADDR, 0, 4)
+    #return get_float(data, 0) 
     return data
 
 def get_float(data, index):
