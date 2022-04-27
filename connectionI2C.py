@@ -4,7 +4,7 @@ import sys
 
 def readMessageFromArduino(message):
     for i in range(len(message)):
-        smsMessage += chr(data_received_from_Arduino[i])
+        smsMessage += chr(message[i])
 
     print(smsMessage.encode('utf-8'))
     data_received_from_Arduino =""
