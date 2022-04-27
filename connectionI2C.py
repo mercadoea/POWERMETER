@@ -3,6 +3,7 @@ import time
 import sys
 
 def readMessageFromArduino(message):
+    print(message)
     for i in range(len(message)):
         smsMessage += chr(message[i])
 
