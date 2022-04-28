@@ -11,8 +11,8 @@ def get_data():
         msg = i2c_msg.read(I2C_SLAVE_ADDR, 4)
         bus.i2c_rdwr(msg)
         data1 = list(msg)
-        
-    return [data] = struct.unpack('f', data1[0:4])
+        [data] = struct.unpack('f', data1[0:4])
+    return data
 
 def get_float(data, index):
     bytes = data[4*index:(index+1)*4]
