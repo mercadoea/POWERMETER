@@ -12,7 +12,7 @@ def get_data():
         bus.i2c_rdwr(msg)
         data1 = list(msg)
         [data] = struct.unpack('f', data1[0:4])
-    return data
+    return data1
 
 def get_float(data, index):
     bytes = data[4*index:(index+1)*4]
