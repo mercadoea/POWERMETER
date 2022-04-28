@@ -3,6 +3,7 @@ from smbus2 import SMBus, i2c_msg
 import time
 import struct
 import smbus2
+bus = smbus2.SMBus(1)
 I2C_SLAVE_ADDR = 0x04
 
 def get_data():
