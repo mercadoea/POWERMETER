@@ -7,7 +7,7 @@ bus = smbus2.SMBus(1)
 I2C_SLAVE_ADDR = 0x04
 
 def get_data():
-    with SMBus(l) as bus:
+    with SMBus(1) as bus:
         msg = i2c_msg.read(I2C_SLAVE_ADDR, 4)
         bus.i2c_rdwr(msg)
         data1 = list(msg)
