@@ -1,15 +1,16 @@
 import sys
-import smbus2 as smbus
+from smbus2 import SMBus, i2c_msg
 import time
 import struct
-bus = smbus.SMBus(1)
+import smbus2
 I2C_SLAVE_ADDR = 0x04
 
 def get_data():
-    data = bus.read_i2c_block_data(I2C_SLAVE_ADDR, 0, 4)
-    #return get_float(data, 0) 
-    data = list(data)
-    data = struct.unpack('f', data[0:4])
+    with SMBus(l) as bus:
+        msg = i2c_msg.read(I2C_SLAVE_ADDR, 4)
+        bus.i2c_rdwr(msg)
+        data1 = list(msg)
+        data = struct.unpack('f', data1[0:4])
     return data
 
 def get_float(data, index):
