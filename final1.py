@@ -41,7 +41,7 @@ def main():
     ieee_data = get_ieee(get_data())
     data = ieee745ToFloat(ieee_data)
     print("\n")
-    print(f'Arduino ansewer: {formated_data(data)}')
+    print(f'Arduino ansewer: {data}')
     time.sleep(1)
 
 try:
