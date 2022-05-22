@@ -1,14 +1,41 @@
+#include <Robojax_WCS.h>
 #include <Wire.h>
 #define SLAVE_ADDRESS 0x04
 //Declaro las variables donde almacenar los datos de campo
-float voltaje =13.65;
-float corriente =-54.3;
-float potencia =24.5;
+float voltaje;
+float corriente;
+float potencia;
 byte number;
 bool charcomplete = false;
 //Declaro los arrays de datos
 byte Datos_recibir;
 byte Datos_enviar[4];
+//Declaro los pines asociados al sensor de corriente
+float medicion;
+float currentSensorVal;
+#define MODEL 12 //see list above
+#define SENSOR_PIN A0 //pin for reading sensor
+#define SENSOR_VCC_PIN 8 //pin for powring up the sensor
+#define ZERO_CURRENT_LED_PIN 2 //zero current LED pin
+
+#define ZERO_CURRENT_WAIT_TIME 5000 //wait for 5 seconds to allow zero current measurement
+#define CORRECTION_VLALUE 164 //mA
+#define MEASUREMENT_ITERATION 20
+#define VOLTAGE_REFERENCE  5000.0 //5000mv is for 5V
+#define BIT_RESOLUTION 10
+#define DEBUT_ONCE true
+Robojax_WCS sensor(
+          MODEL, SENSOR_PIN, SENSOR_VCC_PIN, 
+          ZERO_CURRENT_WAIT_TIME, ZERO_CURRENT_LED_PIN,
+          CORRECTION_VLALUE, MEASUREMENT_ITERATION, VOLTAGE_REFERENCE,
+          BIT_RESOLUTION, DEBUT_ONCE           
+          );
+//Declaro los pines asociados al sensor de voltaje
+const int voltageSensorPin = A1;          // sensor pin
+float vIn;                                // measured voltage (3.3V = max. 16.5V, 5V = max 25V)
+float vOut;
+float voltageSensorVal;                   // value on pin A3 (0 - 1023)
+const float factor = 10.2;               // reduction factor of the Voltage Sensor shield
 
 //Declaro las variables volatiles
 volatile byte* voltajeFloatPtr;
@@ -22,6 +49,7 @@ void setup(){
   Wire.onRequest(requestEvent);
 
   Serial.println("PowerMeter is Ready!" );
+  sensor.start();
   }
 
 void requestEvent(){ //Cuando el maestro solicite datos llamo a esta funcion
@@ -33,6 +61,7 @@ if (charcomplete)
       Datos_enviar[1]=voltajeFloatPtr[1];
       Datos_enviar[2]=voltajeFloatPtr[2];
       Datos_enviar[3]=voltajeFloatPtr[3];
+    
   }
     else{
       if(number==2){
@@ -81,8 +110,10 @@ if (charcomplete)
   }
   
 void loop() {
-  
-      
+   voltageSensorVal = analogRead(voltageSensorPin);    // read the current sensor value (0 - 1023) 
+   vOut = (voltageSensorVal/1024 )*5;             // convert the value to the real voltage on the analog pin
+   voltaje =  vOut * factor;
+   corriente = sensor.getCurrent();
+   potencia = voltaje*corriente;  
     
  }
-  
