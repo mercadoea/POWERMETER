@@ -31,15 +31,31 @@ def __ieee745ToFloat(N): # ieee-745 bits (max 32 bit)
 
     return (-1)**a * c /( 1<<( len(N)-9 - (b-127) ))
 
+def printVoltage():
+    voltage = getVoltage()
+    print("\n")
+    print(f'Arduino answer: {voltage}')
+    time.sleep(1)
+
+def printCurrent():
+    current = getCurrent()
+    print("\n")
+    print(f'Arduino answer: {current}')
+    time.sleep(1)
+
+def printPower():
+    power = getPower()
+    print("\n")
+    print(f'Arduino answer: {power}')
+    time.sleep(1)
+
 def getVoltage():
     number = 1
     __bus.write_byte(__I2C_SLAVE_ADDR, int(number))
     print("Arduino answer to RPI: ", __get_data())
     ieee_data = __get_ieee(__get_data())
     data = __ieee745ToFloat(ieee_data)
-    print("\n")
-    print(f'Arduino answer: {data}')
-    time.sleep(1)
+    return data
 
 def getCurrent():
     number = 2
@@ -47,9 +63,7 @@ def getCurrent():
     print("Arduino answer to RPI: ", __get_data())
     ieee_data = __get_ieee(__get_data())
     data = __ieee745ToFloat(ieee_data)
-    print("\n")
-    print(f'Arduino answer: {data}')
-    time.sleep(1)
+    return data
 
 def getPower():
     number = 3
@@ -57,11 +71,9 @@ def getPower():
     print("Arduino answer to RPI: ", __get_data())
     ieee_data = __get_ieee(__get_data())
     data = __ieee745ToFloat(ieee_data)
-    print("\n")
-    print(f'Arduino answer: {data}')
-    time.sleep(1)
+    return data
 
-def main():
+def init():
     try:
         print("1: Voltaje \n2: Corriente\n3: Potencia")
         number = input("Digite el valor asociado al comando: ")
@@ -76,6 +88,9 @@ def main():
     except KeyboardInterrupt:
         print('\n')
         print('Exiting....')
+    except IOError:
+        print("\n")
+        print("Conexion I2C no detectada")
 
 """ try:
     while True:
